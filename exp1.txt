@@ -1,0 +1,35 @@
+//LiC
+
+G[program]:
+  program → ExtDefList                     //program文件开始符号 ExtDefList指程序语句列表                                                                                 
+  ExtDefList→ExtDef  ExtDefList | ε        //ExtDef指某一行的语句 ExtDefList指后面多行语句
+  ExtDef→Specifier  ExtDecList ; |Specifier  FunDec  CompSt  //声明语句：1.类型限定符与变量列表；2.类型限定符、函数和函数体                                                                                       
+  Specifier→int					   //类型限定符：int
+  ExtDecList→VarDec | VarDec , ExtDecList  //变量列表：1.变量；2.变量，变量列表							
+  VarDec→ID | ID deflist                           //变量：1.标识符;2.标识符和数组列表
+  deflist→[ INT ] deflist | [ INT ]
+  FucDec→ID ( VarList )  | ID ( )		   //函数：1.标识符（形参列表）;2.标识符（）					
+  VarList→ParamDec , VarList   |   ParamDec //形参列表：1.形参声明，形参列表；2.形参声明			
+  ParamDec→Specifier VarDec					//形参声明：类型限定符 变量							
+  CompSt→{ DefList  StmList }			    //函数体：{声明语句列表，其他语句列表}						
+  StmList→Stmt  StmList | ε							
+  Stmt→Exp ;  |  CompSt  | return Exp ;	| break ; | continue ;						
+       | if ( Exp ) Stmt   | if ( Exp ) Stmt else Stmt   | while ( Exp ) Stmt	
+       | switch ( Exp ) { switchStmt }
+  switchStmt→case INT : StmList switchStmt | default : StmList
+  DefList→Def DefList  |    ε									
+  Def→Specifier DecList ;												
+  DecList→Dec  | Dec , DecList					
+  Dec→VarDec					
+  Var→ID | ID list
+  list→[ Exp ] list | [ Exp ]
+  Exp →Exp = Exp  | Exp && Exp |  Exp || Exp   | Exp < Exp | Exp <= Exp |++ Var | -- Var | Var ++ | Var --
+	 	| Exp == Exp | Exp != Exp	| Exp > Exp | Exp >= Exp
+		| Exp + Exp	| Exp - Exp  | Exp * Exp	| Exp / Exp	 | INT
+		| ( Exp )		| - Exp  |  ! Exp  | ID ( Args )  | ID ( ) | Var //表达式
+  Args→Exp , Args  | Exp		//参数列表
+
+  //终结符
+  //ID：标识符
+  //int：整型类型限定符
+  //INT：数值常量
